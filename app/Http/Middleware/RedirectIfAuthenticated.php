@@ -16,9 +16,9 @@ class RedirectIfAuthenticated
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null)
-    {
-        if (Auth::guard($guard)->check()) {
-            return redirect('/home');
+    {//認証ミドルウェアの handle() は、ruotesの ['middleware' => ['auth']] が設定されたルーティングにアクセスされたときに毎回呼ばれる
+        if (Auth::guard($guard)->check()) {//ログインしているかどうかを判断
+            return redirect('/');//ログイン認証済みなのに、ログインページにアクセスしようとすると、リダイレクトされる。
         }
 
         return $next($request);
