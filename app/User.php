@@ -26,4 +26,24 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    public function microposts()//複数形
+    {
+        return $this->hasMany(Micropost::class);//User のインスタンスが自分の Microposts を取得できる
+    }
+    
+    public function show($id)
+    {
+        $user = User::find($id);
+        $microposts = $user->microposts()->orderBy('created_at', 'desc')->paginate(10);
+
+        $data = [
+            'user' => $user,
+            'microposts' => $microposts,
+        ];
+
+        $data += $this->counts($user);
+
+        return view('users.show', $data);
+    }
 }

@@ -11,9 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+
+Route::get('/', 'MicropostsController@index');
 
 // ユーザ登録
 Route::get('signup', 'Auth\RegisterController@showRegistrationForm')->name('signup.get');//views/auth/register.blade.phpを表示する
@@ -26,7 +28,8 @@ Route::post('login', 'Auth\LoginController@login')->name('login.post');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout.get');
 
 //ログイン認証付きのルーティング
-Route::group(['middleware' => ['auth']], function () { //ルーティングのグループを作成
+Route::group(['middleware' => 'auth'], function () { //ルーティングのグループを作成
               //['middleware' => ['auth']]ミドルウェアでこのグループに書かれたルーティングは必ずログイン認証を確認させる
     Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);//['only' => ['index', 'show']]実装するアクションを絞り込む
+    Route::resource('microposts', 'MicropostsController', ['only' => ['store', 'destroy']]);//ログイン認証を必要とするルーティンググループ内に、 Microposts のルーティングを設定
 });
