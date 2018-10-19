@@ -19,17 +19,17 @@ class MicropostsController extends Controller
         $data =[]; 
         if (\Auth::check()) { //ログイン認証を確認
             $user = \Auth::user();//ログイン中のユーザを取得
-            $microposts = $user->microposts()->orderBy('created_at', 'desc')->paginate(10);//ログイン中のユーザのmicropostsを取得
+            $microposts = $user->feed_microposts()->orderBy('created_at', 'desc')->paginate(10);//ログイン中のユーザのmicropostsを取得
             
             $data = [//$dataへ配列
               'user' => $user,
               'microposts' => $microposts,
             ];
-            $data += $this->counts($user);
-            return view('users.show', $data);
-        }else {
-            return view('welcome');
+                                 //$data += $this->counts($user);
+                                 //return view('users.show', $data);
+                                 //}else 
         }
+            return view('welcome', $data);
     }
      
     public function store(Request $request)//「新規登録処理」
